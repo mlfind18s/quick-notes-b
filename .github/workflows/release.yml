@@ -1,0 +1,38 @@
+# Release workflow for the demo when it lives in its own repository (one repository = one appId).
+# Push a tag v<version> equal to package.json "version"; the job builds the app, writes
+# react-host.json + icon.png into dist/, packs the contents of dist/ (not the folder itself)
+# into react-host-app.zip, checks that the tag matches the manifest and attaches the ZIP.
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    # Second copy of the demo: same code and storage keys, its own appId (isolation test).
+    env:
+      RH_APP_ID: dev.yevhen.quicknotes.b
+      RH_APP_NAME: Quick Notes B
+      RH_ICON_COLOR: "#16a34a"
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Manifest, icon, ZIP, validation, tag == v<manifest.version>
+        run: node scripts/package.mjs --tag-from-env
+      - name: Attach react-host-app.zip to the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          gh release view "$TAG" >/dev/null 2>&1 || gh release create "$TAG" --title "$TAG" --notes "Quick Notes $TAG"
+          gh release upload "$TAG" react-host-app.zip --clobber

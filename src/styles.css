@@ -1,0 +1,92 @@
+:root {
+  --bg: #f7f7f5;
+  --surface: #ffffff;
+  --text: #1c1c1a;
+  --muted: #6b6b66;
+  --accent: #2563eb;
+  --border: #e2e2dd;
+  --danger: #b42318;
+  color-scheme: light dark;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #161615;
+    --surface: #1f1f1d;
+    --text: #ededea;
+    --muted: #a3a39d;
+    --accent: #7aa2ff;
+    --border: #33332f;
+    --danger: #ff8a7a;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.app {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: max(16px, env(safe-area-inset-top)) 16px max(24px, env(safe-area-inset-bottom));
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.header { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.header h1 { margin: 0; font-size: 1.5rem; }
+.version { color: var(--muted); font-variant-numeric: tabular-nums; }
+
+.composer { display: flex; flex-direction: column; gap: 8px; }
+textarea {
+  width: 100%;
+  font: inherit;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  resize: vertical;
+}
+button {
+  font: inherit;
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: 12px;
+  border: 0;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+  align-self: flex-end;
+}
+button:disabled { opacity: 0.45; }
+button.link { background: none; color: var(--danger); min-height: 36px; padding: 0 8px; font-weight: 500; }
+
+.notes { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.notes li { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 12px 12px 4px; }
+.notes p { margin: 0 0 4px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.meta { display: flex; justify-content: space-between; align-items: center; color: var(--muted); font-size: 0.85rem; }
+
+.muted { color: var(--muted); }
+.error { color: var(--danger); }
+
+.footer {
+  margin-top: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+.origin { overflow-wrap: anywhere; }
+
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); border: 0;
+}
